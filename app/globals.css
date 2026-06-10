@@ -1,0 +1,360 @@
+@import "tailwindcss";
+
+/* ============================================================
+   BIDAMAN — design tokens
+   Pure black ground. Bone-white type. A muted four-tone system.
+   Square, heavy-block aesthetic — sharp corners, hard shadows.
+   ============================================================ */
+@theme {
+  --color-bg: #000000;
+  --color-star: #edefe8; /* Star White — brightest, emphasis */
+  --color-bone: #e5ddc9; /* Bone White — all text */
+  --color-dove: #a8aaa1; /* Dove — secondary / muted / borders */
+  --color-night: #2a2824; /* hueless dark — panel depth only (no blue) */
+  --color-accent: #357fe0; /* cobalt blue — accent start / solid (marks, selection, focus) */
+  --color-accent-2: #6fb0f0; /* lighter cobalt — accent gradient end */
+
+  --font-mono: var(--font-gsc), ui-monospace, "SF Mono", "Menlo", "Consolas",
+    monospace;
+  --font-pixel: var(--font-silkscreen), var(--font-gsc), ui-monospace, monospace;
+
+  --ease-liquid: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: #000;
+  color: var(--color-bone);
+  font-family: var(--font-mono);
+  font-feature-settings: "liga" 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  /* hairline block grid */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='38'%3E%3Cpath d='M38 0H0V38' fill='none' stroke='%23a8aaa1' stroke-opacity='0.05' stroke-width='1'/%3E%3C/svg%3E");
+  background-position: center top;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #000;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-dove);
+  border: 3px solid #000;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* ============================================================
+   Blocks — sharp-cornered, heavy-bordered, hard-shadowed
+   ============================================================ */
+.block {
+  background: color-mix(in srgb, var(--color-night) 46%, transparent);
+  border: 2px solid color-mix(in srgb, var(--color-dove) 34%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* hard, blur-free offset shadow. --sh sets the tone (default dove). */
+.hard {
+  box-shadow: 7px 7px 0 0 var(--sh, var(--color-dove));
+  transition: transform 0.3s var(--ease-liquid),
+    box-shadow 0.3s var(--ease-liquid), border-color 0.3s var(--ease-liquid),
+    background-color 0.3s var(--ease-liquid);
+}
+.hard-sm {
+  box-shadow: 4px 4px 0 0 var(--sh, var(--color-dove));
+  transition: transform 0.3s var(--ease-liquid),
+    box-shadow 0.3s var(--ease-liquid), border-color 0.3s var(--ease-liquid);
+}
+.lift:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 12px 12px 0 0 var(--sh, var(--color-bone));
+}
+.lift:active {
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0 0 var(--sh, var(--color-dove));
+}
+
+.sh-star {
+  --sh: var(--color-star);
+}
+.sh-bone {
+  --sh: var(--color-bone);
+}
+.sh-dove {
+  --sh: var(--color-dove);
+}
+.sh-accent {
+  --sh: var(--color-accent);
+}
+
+/* ============================================================
+   Logo — clean pixel-block wordmark, bone-white
+   ============================================================ */
+/* The official logo file (public/bidaman-logo.svg) shown bone-white via a CSS
+   mask — the artwork itself is never modified. */
+.logo-img {
+  display: block;
+  aspect-ratio: 10088 / 3138;
+  max-width: 100%;
+  background-color: var(--color-bone);
+  -webkit-mask: url(/bidaman-logo.svg) left center / contain no-repeat;
+  mask: url(/bidaman-logo.svg) left center / contain no-repeat;
+}
+
+/* ============================================================
+   Type helpers
+   ============================================================ */
+.pixel {
+  font-family: var(--font-pixel);
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+}
+.dim {
+  color: var(--color-dove);
+}
+.dimmer {
+  color: color-mix(in srgb, var(--color-dove) 55%, transparent);
+}
+
+.c-star {
+  color: var(--color-star);
+}
+.c-bone {
+  color: var(--color-bone);
+}
+.c-dove {
+  color: var(--color-dove);
+}
+.c-accent {
+  /* gradient accent (amber → painting-purple), clipped to the text itself */
+  background-image: linear-gradient(
+    100deg,
+    var(--color-accent),
+    var(--color-accent-2)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+/* the footer email underline can't be a gradient — give it the solid amber */
+.c-accent.uline::after {
+  background: var(--color-accent);
+}
+
+/* highlighter mark — solid amber block behind a heading's key word(s) */
+.mark {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: 0.08em 0.22em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* solid label block — heavy, like the logo */
+.tag {
+  display: inline-block;
+  font-family: var(--font-pixel);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1;
+  background: var(--color-bone);
+  color: #000;
+  padding: 0.45rem 0.6rem;
+}
+.tag-dove {
+  background: var(--color-dove);
+}
+
+/* ============================================================
+   Buttons — square, heavy
+   ============================================================ */
+/* extruded 3D slab buttons — a raised block with angled right + bottom faces */
+@property --d {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 7px;
+}
+.btn {
+  --d: 7px;
+  --bw: 2px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  border: var(--bw) solid var(--color-bone);
+  background: color-mix(in srgb, var(--color-night) 78%, #000);
+  color: var(--color-bone);
+  padding: 0.75rem 1.15rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s var(--ease-snap), --d 0.15s var(--ease-snap),
+    background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+/* right + bottom extruded faces (skewed to read as a 45° extrusion) */
+.btn::before,
+.btn::after {
+  content: "";
+  position: absolute;
+  background: var(--color-dove);
+  transform-origin: 0 0;
+}
+.btn::before {
+  top: calc(-1 * var(--bw));
+  left: 100%;
+  margin-left: var(--bw);
+  width: var(--d);
+  height: calc(100% + 2 * var(--bw));
+  transform: skewY(45deg);
+}
+.btn::after {
+  top: 100%;
+  margin-top: var(--bw);
+  left: calc(-1 * var(--bw));
+  width: calc(100% + 2 * var(--bw));
+  height: var(--d);
+  transform: skewX(45deg);
+}
+.btn:hover {
+  --d: 10px;
+  transform: translate(-2px, -2px);
+}
+.btn:active {
+  --d: 0px;
+  transform: translate(7px, 7px);
+}
+.btn-solid {
+  background: var(--color-bone);
+  border-color: var(--color-bone);
+  color: #000;
+}
+.btn-solid:hover {
+  background: var(--color-star);
+  border-color: var(--color-star);
+}
+
+/* ============================================================
+   Links
+   ============================================================ */
+.uline {
+  position: relative;
+}
+.uline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 2px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease-liquid);
+}
+.uline:hover::after {
+  transform: scaleX(1);
+}
+
+/* ============================================================
+   Reveal on scroll
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.65s var(--ease-liquid), transform 0.65s var(--ease-liquid);
+  will-change: opacity, transform;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* liquid tab indicator — sharp block */
+.tab-ink {
+  position: absolute;
+  z-index: 0;
+  background: var(--color-bone);
+  transition: transform 0.4s var(--ease-liquid), width 0.4s var(--ease-liquid);
+}
+.tab-panel {
+  animation: tabin 0.45s var(--ease-liquid);
+}
+@keyframes tabin {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ============================================================
+   Film grain — one static feTurbulence tile, fixed full-page overlay.
+   No JS, no network request. position:fixed keeps it on a cached compositor
+   layer (no repaint on scroll). On html::after so it's independent of the
+   body grid background. Normal blend so it stays visible over pure black.
+   ============================================================ */
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.9'%20numOctaves='2'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20type='saturate'%20values='0'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 160px 160px;
+  will-change: transform;
+  transform: translateZ(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  html::after {
+    opacity: 0.04;
+  }
+}
